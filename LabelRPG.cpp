@@ -41,15 +41,21 @@ LabelRPG* LabelRPG::createWithTTF(const TTFConfig& ttfConfig, const std::string&
 
 void LabelRPG::setStringWithRunText(const std::string &text, float interval)
 {
+    setStringWithRunText(text, interval, []{});
+}
+
+void LabelRPG::setStringWithRunText(const std::string &text, float interval, std::function<void()> finishCallback)
+{
     // 検証したのはTTFだけなので...
     if (_currentLabelType == LabelType::TTF) {
         nowLabelLenght_ = 0;
         nowLabelText_ = std::string(text);
-        
-        Director::getInstance()->getScheduler()->schedule([this](float time) {
+
+        Director::getInstance()->getScheduler()->schedule([this, finishCallback](float time) {
             // 全部表示したら停止
             if (nowLabelLenght_ == this->nowLabelText_.length()) {
                 Director::getInstance()->getScheduler()->unschedule("textTimer", this);
+                finishCallback();
             } else {
                 // マルチバイト対応
                 unsigned char lead = this->nowLabelText_[nowLabelLenght_];
