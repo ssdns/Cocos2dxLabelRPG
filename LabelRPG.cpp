@@ -70,7 +70,9 @@ void LabelRPG::setStringWithRunText(const std::string &text, float interval, std
                     charSize = 4;
                 }
                 nowLabelLenght_ += charSize;
-
+                if (skip_) {
+                    nowLabelLenght_ = this->nowLabelText_.length();
+                }
                 std::string s(this->nowLabelText_, 0, nowLabelLenght_);
                 CCLOG("tim = %f len = %ld text = %s nowText = %s", time, this->getString().length(), this->nowLabelText_.c_str(), s.c_str());
                 this->setString(s);

@@ -21,15 +21,16 @@ public:
 
     static LabelRPG* createWithTTF(const cocos2d::TTFConfig& ttfConfig, const std::string& text, cocos2d::TextHAlignment alignment = cocos2d::TextHAlignment::LEFT, int maxLineWidth = 0);
 
+    void skip() { skip_ = true; };
     void setStringWithRunText(const std::string &text, float interval);
     void setStringWithRunText(const std::string &text, float interval, std::function<void()> finishCallback);
-
     void setOriginalPosition(cocos2d::Point originalPoint) {
         originalPoint_ = originalPoint;
         this->setPosition(originalPoint_);
     };
 private:
     int nowLabelLenght_;
+    bool skip_ = false;
     std::string nowLabelText_;
     cocos2d::Point originalPoint_;
 };
