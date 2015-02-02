@@ -50,10 +50,10 @@ void LabelRPG::setStringWithRunText(const std::string &text, float interval, std
     if (_currentLabelType == LabelType::TTF) {
         nowLabelLenght_ = 0;
         nowLabelText_ = std::string(text);
-
-        Director::getInstance()->getScheduler()->schedule([this, finishCallback](float time) {
+        const int maxLength = this->nowLabelText_.length();
+        Director::getInstance()->getScheduler()->schedule([this, maxLength, finishCallback](float time) {
             // 全部表示したら停止
-            if (nowLabelLenght_ == this->nowLabelText_.length()) {
+            if (nowLabelLenght_ == maxLength) {
                 Director::getInstance()->getScheduler()->unschedule("textTimer", this);
                 finishCallback();
             } else {
@@ -70,8 +70,8 @@ void LabelRPG::setStringWithRunText(const std::string &text, float interval, std
                     charSize = 4;
                 }
                 nowLabelLenght_ += charSize;
-                if (skip_) {
-                    nowLabelLenght_ = this->nowLabelText_.length();
+                if (skip_ || nowLabelLenght_ > maxLength) {
+                    nowLabelLenght_ = maxLength;
                 }
                 std::string s(this->nowLabelText_, 0, nowLabelLenght_);
                 CCLOG("tim = %f len = %ld text = %s nowText = %s", time, this->getString().length(), this->nowLabelText_.c_str(), s.c_str());
